@@ -24,16 +24,19 @@ namespace WebApi.Controllers
 
         private readonly BookStoreDBContext _context;
 
-        public BookController(BookStoreDBContext context)
+        // AutoMapper Dependency injection paketine sahip olduğumuzdan injection yöntemiyle IMapper'ı kullanabileceğiz  
+        private readonly IMapper _mapper;
+
+        public BookController(BookStoreDBContext context, IMapper mapper)
         {
             _context = context;
-
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult GetBooks()
         {
-            GetBooksQuery query = new GetBooksQuery(_context);
+            GetBooksQuery query = new GetBooksQuery(_context, _mapper);
             var result = query.Handle();
             return Ok(result);
         }
@@ -45,7 +48,7 @@ namespace WebApi.Controllers
             BookDetailViewModel result;
             try
             {
-                GetBookDetailQuery query = new GetBookDetailQuery(_context);
+                GetBookDetailQuery query = new GetBookDetailQuery(_context, _mapper);
                 query.BookId = id;
                 result = query.Handle();
 
@@ -63,7 +66,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public IActionResult AddBook([FromBody] CreateBookModel newBook)
         {
-            CreateBookCommand command = new CreateBookCommand(_context);
+            CreateBookCommand command = new CreateBookCommand(_context, _mapper);
             try
             {
                 command.Model = newBook;
@@ -94,6 +97,8 @@ namespace WebApi.Controllers
             try
             {
                 UpdateBookCommand command = new UpdateBookCommand(_context);
+                command.Model = updatedBook;
+                command.BookId = id;
                 command.BookId = id;
                 command.Model = updatedBook;
                 command.Handle();

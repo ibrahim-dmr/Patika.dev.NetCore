@@ -1,4 +1,6 @@
-﻿using WebApi.DBOperations;
+﻿using AutoMapper;
+using WebApi.DBOperations;
+using WebApi.Entities;
 
 namespace WebApi.Application.BookOperations.UpdateBook
 {
@@ -19,9 +21,9 @@ namespace WebApi.Application.BookOperations.UpdateBook
             if (book is null)
                 throw new InvalidOperationException("Güncellenecek kitap bulunamadı!");
 
-            book.GenreId = Model.GenreId != default ? Model.GenreId : book.GenreId;
             book.Title = Model.Title != default ? Model.Title : book.Title;
-            
+            book.GenreId = Model.GenreId != default ? Model.GenreId : book.GenreId;
+
             _context.SaveChanges();
         }
 

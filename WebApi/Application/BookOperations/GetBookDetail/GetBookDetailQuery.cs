@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using WebApi.Common;
 using WebApi.DBOperations;
 
@@ -7,10 +8,12 @@ namespace WebApi.Application.BookOperations.GetBookDetail
     public class GetBookDetailQuery
     {
         private readonly BookStoreDBContext _dbContext;
+        private readonly IMapper _mapper;
         public int BookId { get; set; }
-        public GetBookDetailQuery(BookStoreDBContext dbContext)
+        public GetBookDetailQuery(BookStoreDBContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public BookDetailViewModel Handle()
@@ -21,11 +24,8 @@ namespace WebApi.Application.BookOperations.GetBookDetail
                 throw new InvalidOperationException("Kitap bulunamadı!");
 
 
-            BookDetailViewModel vm = new BookDetailViewModel();
-            vm.Title = book.Title;
-            vm.PageCount = book.PageCount;
-            vm.PublishDate = book.PublisDate.Date.ToString("dd/mm/yyy");
-            vm.Genre = ((GenreEnum)book.GenreId).ToString();
+            BookDetailViewModel vm = _mapper.Map<BookDetailViewModel>(book); // book datasını BookDetailsViewModel'e map'le          
+
             
             return vm;
         }
