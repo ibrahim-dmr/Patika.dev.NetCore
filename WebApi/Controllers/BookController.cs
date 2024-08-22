@@ -61,7 +61,6 @@ namespace WebApi.Controllers
         }
 
 
-
         //post
         [HttpPost]
         public IActionResult AddBook([FromBody] CreateBookModel newBook)
@@ -70,7 +69,18 @@ namespace WebApi.Controllers
             try
             {
                 command.Model = newBook;
+
+                CreateBookCommandValidator validator = new CreateBookCommandValidator();
+                validator.ValidateAndThrow(command);
                 command.Handle();
+
+                //ValidationResult result = validator.Validate(command);
+                //if(!result.IsValid)
+                //    foreach (var item in result.Errors)
+                //    {
+                //        Console.WriteLine("Özellik: " + item.PropertyName + "- Error Message: " + item.ErrorMessage);
+                //    }
+                //else
             }
             catch (Exception ex)
             {
@@ -86,7 +96,6 @@ namespace WebApi.Controllers
             //else
             //command.Handle();
 
-            return Ok();
 
         }
         //put
@@ -97,6 +106,8 @@ namespace WebApi.Controllers
             try
             {
                 UpdateBookCommand command = new UpdateBookCommand(_context);
+                UpdateBookCommandValidator validator = new UpdateBookCommandValidator();
+                validator.ValidateAndThrow(command);
                 command.Model = updatedBook;
                 command.BookId = id;
                 command.BookId = id;
@@ -117,6 +128,8 @@ namespace WebApi.Controllers
             try
             {
                 DeleteBookCommand command = new DeleteBookCommand(_context);
+                DeleteBookCommandValidator validator = new DeleteBookCommandValidator();
+                validator.ValidateAndThrow(command);
                 command.BookId = id;
                 command.Handle();
             }
