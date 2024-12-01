@@ -10,56 +10,60 @@ namespace WebApi.DBOperations
         {
             using (var context = new BookStoreDBContext(serviceprovider.GetRequiredService<DbContextOptions<BookStoreDBContext>>()))
             {
-                if (context.Books.Any())
+                // Veritabanýnda zaten veri varsa, iþlemi durdur
+                if (context.Genres.Any())
                 {
                     return;
                 }
 
-
+                // Genre verilerini ekle
                 context.Genres.AddRange(
                     new Genre
                     {
-                        Name = "Personal Growth"
+                        Name = "Personal Growth",
+                        Title = "Personal Growth Literature"
                     },
                     new Genre
                     {
-                        Name = "Science Fiction"
+                        Name = "Science Fiction",
+                        Title = "Futuristic and Speculative Fiction"
                     },
                     new Genre
                     {
-                        Name = "Romance"
+                        Name = "Romance",
+                        Title = "Love and Relationships"
                     }
                 );
 
+                // Book verilerini ekle
                 context.Books.AddRange(
                     new Book
                     {
-                        
                         Title = "Learn Startup",
-                        GenreId = 1, 
+                        GenreId = 1,
                         PageCount = 200,
                         PublisDate = new DateTime(2001, 06, 12),
                     },
                     new Book
                     {
-                        
                         Title = "Herland",
-                        GenreId = 2, 
+                        GenreId = 2,
                         PageCount = 250,
                         PublisDate = new DateTime(2010, 05, 23),
                     },
                     new Book
                     {
-                       
                         Title = "Dune",
-                        GenreId = 1, 
+                        GenreId = 1,
                         PageCount = 540,
                         PublisDate = new DateTime(2001, 12, 21),
                     }
                 );
 
+                // Deðiþiklikleri kaydet
                 context.SaveChanges();
             }
         }
+
     }
 }

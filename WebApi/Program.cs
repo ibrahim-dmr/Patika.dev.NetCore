@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebApi.DBOperations;
+using WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +35,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddDbContext<BookStoreDBContext>(options => options.UseInMemoryDatabase(databaseName: "BookStoreDB"));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 
 
@@ -43,7 +44,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MinimalApp v1"));
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApi"));
 }
 
 app.UseAuthentication();
@@ -51,8 +52,15 @@ app.UseAuthentication();
 app.UseRouting();
 app.UseAuthorization();
 
+app.UseCustomExceptionMiddle();
 
-app.MapControllers();
+using (var scope = app.Services.CreateScope())
+{
+    var sevices = scope.ServiceProvider;
+    DataGenerator.Initialize(sevices);
+}
+
+    app.MapControllers();
 
 app.Run();
 

@@ -3,7 +3,7 @@
     public enum GenreEnum
     {
         PersonelGrowth = 1,
-        ScienceFinction,
-        Noval,
+        ScienceFinction = 2,
+        Noval = 3,
     }
 }

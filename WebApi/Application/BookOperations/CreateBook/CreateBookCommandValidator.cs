@@ -8,9 +8,12 @@ namespace WebApi.Application.BookOperations.CreateBook
         public CreateBookCommandValidator() 
         {
             RuleFor(command => command.Model.GenreId).GreaterThan(0);
-            RuleFor(comman => comman.Model.PageCount).GreaterThan(0);
+            RuleFor(command => command.Model.PageCount).GreaterThan(0);
             RuleFor(command => command.Model.Publishdate).NotEmpty().LessThan(DateTime.Now.Date); 
-            RuleFor(comman => comman.Model.Title).NotEmpty().MinimumLength(2);
+            RuleFor(command => command.Model.Title).NotEmpty().MinimumLength(2);
         }
     }
 }
+
+
+
