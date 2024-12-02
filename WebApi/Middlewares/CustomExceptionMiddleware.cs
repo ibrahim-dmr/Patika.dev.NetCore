@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Net;
+using WebApi.Services;
 
 namespace WebApi.Middlewares
 {
@@ -11,12 +12,14 @@ namespace WebApi.Middlewares
         // RequestDelegate, bir HTTP isteği işlendiğinde yapılacak işlemleri belirten delegedir. 
         // _next, pipeline'daki bir sonraki middleware'i temsil eder.
         private readonly RequestDelegate _next;
+        private readonly ILoggerService _loggerService;
 
         // Yapıcı metod, bir sonraki middleware'i alır.
         // Bu metod, middleware'in çalışmaya başlamadan önce gerekli olan bağımlılıkları alır.
-        public CustomExceptionMiddleware(RequestDelegate next)
+        public CustomExceptionMiddleware(RequestDelegate next, ILoggerService loggerService)
         {
             _next = next;
+            _loggerService = loggerService;
         }
 
         // Invoke metodu, gelen HTTP isteği üzerinde işlemler yapar.
@@ -27,12 +30,12 @@ namespace WebApi.Middlewares
             try
             {
                 string message = $"[Request] HTTP {context.Request.Method} - {context.Request.Path}";
-                Debug.WriteLine(message);
+                _loggerService.Write(message);
                 await _next(context);
                 watch.Stop();
                 message = $"[Response] HTTP {context.Request.Method} - {context.Request.Path}" +
                     $" responded {context.Response.StatusCode} in {watch.Elapsed.TotalMilliseconds} ms";
-                Debug.WriteLine(message);
+                _loggerService.Write(message);
             }
             catch (Exception ex)
             {
@@ -48,7 +51,7 @@ namespace WebApi.Middlewares
 
             string message = $"Error HTTP {context.Request.Method} - {context.Response.StatusCode} Error Message" +
                 $"{ex.Message} in {watch.Elapsed.Milliseconds} ms";
-            Debug.WriteLine(message);
+            _loggerService.Write(message);
 
             var result = JsonConvert.SerializeObject(new { error = ex.Message }, Formatting.None);
             await context.Response.WriteAsync(result);

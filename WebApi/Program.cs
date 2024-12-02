@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using WebApi.DBOperations;
 using WebApi.Middlewares;
+using WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,10 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 
+builder.Services.AddSingleton<ILoggerService, ConsoleLogger>();
+
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -53,6 +58,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.UseCustomExceptionMiddle();
+
 
 using (var scope = app.Services.CreateScope())
 {
