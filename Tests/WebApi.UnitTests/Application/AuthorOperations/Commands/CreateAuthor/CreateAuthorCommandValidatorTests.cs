@@ -2,6 +2,7 @@ using FluentAssertions;
 using TestSetup;
 using webApi.Application.AuthorOperations.CreateAuthor;
 using webApi.Application.AuthorOperations.CreateAuthor;
+using WebApi.Application.AuthorOperations.Commands.CreateAuthor;
 using WebApi.DBOperations;
 using WebApi.Entities;
 using Xunit;

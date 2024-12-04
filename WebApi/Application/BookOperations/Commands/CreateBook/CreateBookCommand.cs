@@ -2,7 +2,7 @@
 using WebApi.DBOperations;
 using WebApi.Entities;
 
-namespace WebApi.Application.BookOperations.CreateBook
+namespace WebApi.Application.BookOperations.Commands.CreateBook
 {
     public class CreateBookCommand
     {
@@ -20,7 +20,7 @@ namespace WebApi.Application.BookOperations.CreateBook
         {
             var book = _dbContext.Books.SingleOrDefault(x => x.Title == Model.Title);
 
-            if(book is not null)
+            if (book is not null)
                 throw new InvalidOperationException("Kitap zaten mevcut!");
 
             book = _mapper.Map<Book>(Model);     // Model datasını Book'a map'le    

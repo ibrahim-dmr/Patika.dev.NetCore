@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApi.Common;
 using WebApi.DBOperations;
 
-namespace WebApi.Application.BookOperations.GetBookDetail
+namespace WebApi.Application.BookOperations.Queries.GetBookDetail
 {
     public class GetBookDetailQuery
     {
@@ -18,7 +18,7 @@ namespace WebApi.Application.BookOperations.GetBookDetail
 
         public BookDetailViewModel Handle()
         {
-            var book = _dbContext.Books.Where(x => x.Id == BookId).SingleOrDefault();
+            var book = _dbContext.Books.Include(x => x.Genre).Where(x => x.Id == BookId).SingleOrDefault();
 
             if (book is null)
                 throw new InvalidOperationException("Kitap bulunamadı!");
@@ -26,7 +26,7 @@ namespace WebApi.Application.BookOperations.GetBookDetail
 
             BookDetailViewModel vm = _mapper.Map<BookDetailViewModel>(book); // book datasını BookDetailsViewModel'e map'le          
 
-            
+
             return vm;
         }
     }
@@ -34,7 +34,7 @@ namespace WebApi.Application.BookOperations.GetBookDetail
     public class BookDetailViewModel
     {
         public string Title { get; set; }
-        public string  Genre { get; set; }
+        public string Genre { get; set; }
         public int PageCount { get; set; }
         public string PublishDate { get; set; }
     }
