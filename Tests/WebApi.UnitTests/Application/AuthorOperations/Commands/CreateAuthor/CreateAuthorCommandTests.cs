@@ -6,7 +6,6 @@ using TestSetup;
 using WebApi.DBOperations;
 using WebApi.Entities;
 using Xunit;
-using webApi.Application.AuthorOperations.CreateAuthor;
 using WebApi.Application.AuthorOperations.Commands.CreateAuthor;
 
 

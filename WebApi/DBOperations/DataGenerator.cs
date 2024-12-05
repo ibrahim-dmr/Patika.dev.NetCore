@@ -8,7 +8,7 @@ namespace WebApi.DBOperations
     {
         public static void Initialize(IServiceProvider serviceprovider)
         {
-            using (var context = new BookStoreDBContext(serviceprovider.GetRequiredService<DbContextOptions<BookStoreDBContext>>()))
+            using (var context = new BookStoreDbContext(serviceprovider.GetRequiredService<DbContextOptions<BookStoreDbContext>>()))
             {
                 // Veritabanýnda zaten veri varsa, iþlemi durdur
                 if (context.Genres.Any())
@@ -59,6 +59,32 @@ namespace WebApi.DBOperations
                         PublisDate = new DateTime(2001, 12, 21),
                     }
                 );
+
+                // Author verilerini ekle
+                context.Authors.AddRange(
+                    new Author
+                    {
+                        FirstName = "George",
+                        LastName = "Orwell",
+                        DateOfBirth = new DateTime(1903, 06, 25),
+                        IsActive = true
+                    },
+                    new Author
+                    {
+                        FirstName = "Virginia",
+                        LastName = "Woolf",
+                        DateOfBirth = new DateTime(1882, 01, 25),
+                        IsActive = true
+                    },
+                    new Author
+                    {
+                        FirstName = "Isaac",
+                        LastName = "Asimov",
+                        DateOfBirth = new DateTime(1920, 01, 02),
+                        IsActive = true
+                    }
+                );
+
 
                 // Deðiþiklikleri kaydet
                 context.SaveChanges();

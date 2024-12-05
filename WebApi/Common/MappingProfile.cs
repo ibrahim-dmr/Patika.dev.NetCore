@@ -19,7 +19,10 @@ namespace WebApi.Common
         public MappingProfile() 
         {
             CreateMap<CreateBookModel, Book>();  // CreateBookModel objesi Book objesine map'lenebilir olsun
-            CreateMap<Book, BookDetailViewModel>().ForMember(dest => dest.Genre, opt => opt.MapFrom(src => src.Genre.Name));
+            CreateMap<Book, BookDetailViewModel>()
+                .ForMember(dest => dest.Genre, opt => opt.MapFrom(src => src.Genre.Name))
+                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => $"{src.Author.FirstName} {src.Author.LastName}"));
+
             CreateMap<Book, BooksViewModel>().ForMember(dest => dest.Genre, opt => opt.MapFrom(src => src.Genre.Name));
             // BooksViewModel içerisindeki Genre'yı sana verdiğim config ile maple MapFrom yani neyden mapleyeceğini söylüyorum 
             // source üzerindeki GenreId'yi test ederek GenreEnum'a dönüştür GenreEnum'ın string karşılığını bana getir.

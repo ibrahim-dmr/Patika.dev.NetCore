@@ -7,10 +7,10 @@ namespace WebApi.Application.AuthorOperations.Queries.GetAuthors
 {
     public class GetAuthorsQuery
     {
-        private readonly BookStoreDBContext _context;
+        private readonly IBookStoreDbContext _context;
         private readonly IMapper _mapper;
 
-        public GetAuthorsQuery(BookStoreDBContext context, IMapper mapper)
+        public GetAuthorsQuery(IBookStoreDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -19,13 +19,15 @@ namespace WebApi.Application.AuthorOperations.Queries.GetAuthors
         public List<AuthorsViewModel> Handle()
         {
             // Aktif yazarları listele
-            var authors = _context.Authors
+            var authors = _context.Authors.ToList()
                 .Where(x => x.IsActive)  // Aktif yazarları getiriyoruz
                 .OrderBy(x => x.LastName)  // Soyadına göre sıralıyoruz
                 .ToList();
 
             if (authors.Count == 0)
+            {
                 throw new InvalidOperationException("Aktif yazar bulunamadı!");
+            }
 
             // Yazarları DTO'ya dönüştürme
             return _mapper.Map<List<AuthorsViewModel>>(authors);
