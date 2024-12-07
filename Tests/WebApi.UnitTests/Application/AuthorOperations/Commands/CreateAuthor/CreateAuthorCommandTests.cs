@@ -3,17 +3,20 @@ using System.Linq;
 using AutoMapper;
 using FluentAssertions;
 using TestSetup;
-using WebApi.DBOperations;
 using WebApi.Entities;
 using Xunit;
 using WebApi.Application.AuthorOperations.Commands.CreateAuthor;
+using WebApi.DBOperations;
+
+
+
 
 
 namespace Application.AuthorOperations.Commands.CreateAuthor
 {
     public class CreateAuthorCommandTests : IClassFixture<CommonTestFixture>
     {
-        private readonly BookStoreDBContext _context;
+        private readonly BookStoreDbContext _context;
 
         private readonly IMapper _mapper;
   

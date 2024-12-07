@@ -10,8 +10,9 @@ using WebApi.Services;
 using WebApi.DBOperations; 
 
 var builder = WebApplication.CreateBuilder(args);
+ConfigurationManager configuration = builder.Configuration;
 
- 
+
 
 builder.Services.AddCors();
 
@@ -19,12 +20,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 {
     opt.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateAudience = true,
+        ValidateAudience = true,  
         ValidateIssuer = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Token: Issuer"],
-        ValidAudience = builder.Configuration["Token: Audience"],
+        ValidIssuer = builder.Configuration["Token:Issuer"],
+        ValidAudience = builder.Configuration["Token:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
         ClockSkew = TimeSpan.Zero
 
